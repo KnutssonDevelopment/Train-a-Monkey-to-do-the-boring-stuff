@@ -1,0 +1,8 @@
+I have been unable to find any licensing information for the PSWindowsUpdate modules. I am uncertain how it works.
+
+I have downloaded the module from PSGallery using the Save-Module command in powershell.
+
+The modules original location is here: https://www.powershellgallery.com/packages/PSWindowsUpdate
+
+Please follow any licencing guidelines found there. The reason to include it in the repository is simply because the training
+environment has limites Internet Access.
