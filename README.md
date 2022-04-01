@@ -34,6 +34,12 @@ cd Train-a-Monkey-to-do-the-boring-stuff
 
 
 
+## PSWindowsUpdate
+
+The Real PSWindowsUpdate module has been replaced with a fake modules that only outputs to the screen, and can do an automatic reboot.
+
+
+
 ## TODO
 
 ### Setup script
@@ -55,17 +61,5 @@ cd Train-a-Monkey-to-do-the-boring-stuff
 # Install PSWindowsUpdate from GIT Repo
 net use Z: \\windows-0602\c$
 xcopy PSModules\PSWindowsUpdate 'Z:\Program Files\WindowsPowershell\Modules\'
-
-# Leave Domain
-# Delete Policies Keys from registry
-```
-
-
-
-## Notes
-
-```powershell
-# Save PS module for offline install
-Save-module -Name PSWindowsUpdate -Path .
 ```
 
