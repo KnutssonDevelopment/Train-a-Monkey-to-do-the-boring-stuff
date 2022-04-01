@@ -15,10 +15,12 @@ vRO URL - https://vr-automation.corp.local/vco/
 
 ### Logins
 
-| Resource          | Username | Password |
-| ----------------- | -------- | -------- |
-| vRO Control Panel | root     | VMware1! |
-| vRO Client        | holadmin | VMware1! |
+| Resource                  | Username                    | Password |
+| ------------------------- | --------------------------- | -------- |
+| vSphere Client            | administrator@vsphere.local | VMware1! |
+| vRO Control Panel         | root                        | VMware1! |
+| vRO Client                | holadmin                    | VMware1! |
+| Windows VM (windows-0602) | administrator               | VMware1! |
 
 
 
@@ -38,3 +40,23 @@ cd Train-a-Monkey-to-do-the-boring-stuff
 
 * Create bookmarks for relevant URLs
 * Delete irrelevant URLs
+* Snapshot Windows VM
+  * Shutdown windows-0602
+  * Take a base snapshot
+  * PowerOn windows-0602
+* Enable Windows Update Service
+  * Revert WU GPO
+  * Set Service to Manuel
+  * Reboot VM
+* Prepare Windows for scripting
+  * Install-Module PSWindowsUpdate -Confirm:$false
+
+
+
+## Notes
+
+```powershell
+# Save PS module for offline install
+Save-module -Name PSWindowsUpdate -Path .
+```
+
