@@ -55,6 +55,9 @@ cd Train-a-Monkey-to-do-the-boring-stuff
 # Install PSWindowsUpdate from GIT Repo
 net use Z: \\windows-0602\c$
 xcopy PSModules\PSWindowsUpdate 'Z:\Program Files\WindowsPowershell\Modules\'
+
+# Leave Domain
+# Delete Policies Keys from registry
 ```
 
 
