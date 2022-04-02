@@ -32,30 +32,32 @@ Function Update-Package {
         [Parameter(ValueFromPipeline=$true)][PSCustomObject]$Package,
         [Parameter(Mandatory)][ValidateSet("Rejected", "Accepted", "Downloaded", "Installed")]$Result,
         [Parameter(Mandatory)][int]$Task,
-        [int[]]$lengths
+        [int[]]$lengths,
+        [switch]$skipTitle
     )
     begin {
-        Write-Host "X ComputerName" -NoNewline
-        Write-Host "$(' ' * (($lengths[0]) - 12 + 1))" -NoNewline
-        Write-Host "Result" -NoNewline
-        Write-Host "$(' ' * (10 - 6 + 1))" -NoNewline
-        Write-Host "KB" -NoNewline
-        Write-Host "$(' ' * (($lengths[1]) - 2 + 1))" -NoNewline
-        Write-Host "Size" -NoNewline
-        Write-Host "$(' ' * (($lengths[2]) - 4 + 1))" -NoNewline
-        Write-Host "Title"
-        Write-Host "- " -NoNewline
-        Write-Host "------------" -NoNewline
-        Write-Host "$(' ' * (($lengths[0]) - 12 + 1))" -NoNewline
-        Write-Host "------" -NoNewline
-        Write-Host "$(' ' * (10 - 6 + 1))" -NoNewline
-        Write-Host "--" -NoNewline
-        Write-Host "$(' ' * (($lengths[1]) - 2 + 1))" -NoNewline
-        Write-Host "----" -NoNewline
-        Write-Host "$(' ' * (($lengths[2]) - 4 + 1))" -NoNewline
-        Write-Host "-----"
-
-        $first_loop = $true
+        if (-Not $skipTitle) {
+            Write-Host "X ComputerName" -NoNewline
+            Write-Host "$(' ' * (($lengths[0]) - 12 + 1))" -NoNewline
+            Write-Host "Result" -NoNewline
+            Write-Host "$(' ' * (10 - 6 + 1))" -NoNewline
+            Write-Host "KB" -NoNewline
+            Write-Host "$(' ' * (($lengths[1]) - 2 + 1))" -NoNewline
+            Write-Host "Size" -NoNewline
+            Write-Host "$(' ' * (($lengths[2]) - 4 + 1))" -NoNewline
+            Write-Host "Title"
+            Write-Host "- " -NoNewline
+            Write-Host "------------" -NoNewline
+            Write-Host "$(' ' * (($lengths[0]) - 12 + 1))" -NoNewline
+            Write-Host "------" -NoNewline
+            Write-Host "$(' ' * (10 - 6 + 1))" -NoNewline
+            Write-Host "--" -NoNewline
+            Write-Host "$(' ' * (($lengths[1]) - 2 + 1))" -NoNewline
+            Write-Host "----" -NoNewline
+            Write-Host "$(' ' * (($lengths[2]) - 4 + 1))" -NoNewline
+            Write-Host "-----"
+            $first_loop = $true
+        }
     }
 
     process{
@@ -82,9 +84,7 @@ Function Update-Package {
         Write-Host "$($Package.Title)"
     }
 
-    end {
-        Write-Host ""
-    }
+    end {}
 }
 
 
@@ -117,7 +117,7 @@ Function Get-WindowsUpdate {
     .EXAMPLE
         C:\PS>
         
-        Get-WindowsUpdate -AcceptAll:$true -Install:$true -AutoReboot:$false -Crash:$true
+        Get-WindowsUpdate -AcceptAll:$true -Install:$true -AutoReboot:$false
         
     .NOTES
         Author: Brian F. Knutsson - CRIT Solutions
@@ -159,16 +159,17 @@ Function Get-WindowsUpdate {
 
             $result = 'Downloaded'
             $task = '2'
-            $packages | Update-Package -Task $task -Result $result -Lengths $lengths | Format-Table X,ComputerName,Result,KB,Size,Title -AutoSize
+            $packages | Update-Package -Task $task -Result $result -Lengths $lengths -skipTitle:$true | Format-Table X,ComputerName,Result,KB,Size,Title -AutoSize
 
             $result = 'Installed'
             $task = '3'
-            $packages | Update-Package -Task $task -Result $result -Lengths $lengths | Format-Table X,ComputerName,Result,KB,Size,Title -AutoSize
+            $packages | Update-Package -Task $task -Result $result -Lengths $lengths -skipTitle:$true | Format-Table X,ComputerName,Result,KB,Size,Title -AutoSize
 
             if ($AutoReboot) {
                 Write-Host "Rebooting Computer"
                 #Restart-Computer
             } else {
+                Write-Host ""
                 Write-Host "The computer needs to reboot..."
             }
         } else {
