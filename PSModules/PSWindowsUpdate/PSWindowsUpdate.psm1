@@ -61,14 +61,16 @@ Function Update-Package {
     }
 
     process{
-        $package | Add-Member -NotePropertyName 'X' -NotePropertyValue $task -Force
+        $package | Add-Member -NotePropertyName 'X' -NotePropertyValue $Task -Force
         $package | Add-Member -NotePropertyName 'Result' -NotePropertyValue $Result -Force
 
         if (($first_loop) -And (($Result -Like "Rejected") -Or ($Result -Like "Accepted"))) {
             Start-Sleep -s 5
             $first_loop = $false
-        } elseif (($Result -NotLike "Rejected") -And ($Result -NotLike "Accepted")) {
+        } elseif ($Result -Like "Downloaded") {
             Start-Sleep -s 1
+        } elseif ($Result -Like "Installed") {
+            Start-Sleep -s 5
         }
 
         Write-Host "$($Package.X)" -NoNewline
@@ -132,10 +134,11 @@ Function Get-WindowsUpdate {
         [switch]$AutoReboot=$false,
         [switch]$Crash=$false
     )
-    
+    Write-Host ""
+        
     $packages = Get-Packages
 
-    $task = '1'
+    $task = 1
     if ($AcceptAll) {
         $result = 'Accepted'
     } else {
@@ -158,11 +161,11 @@ Function Get-WindowsUpdate {
             $packages | Update-Package -Task $task -Result $result -Lengths $lengths | Format-Table X,ComputerName,Result,KB,Size,Title -AutoSize
 
             $result = 'Downloaded'
-            $task = '2'
+            $task = 2
             $packages | Update-Package -Task $task -Result $result -Lengths $lengths -skipTitle:$true | Format-Table X,ComputerName,Result,KB,Size,Title -AutoSize
 
             $result = 'Installed'
-            $task = '3'
+            $task = 3
             $packages | Update-Package -Task $task -Result $result -Lengths $lengths -skipTitle:$true | Format-Table X,ComputerName,Result,KB,Size,Title -AutoSize
 
             if ($AutoReboot) {
@@ -174,11 +177,11 @@ Function Get-WindowsUpdate {
             }
         } else {
             $result = 'Rejected'
-            $task = '1'
-            $packages | Update-Package -Task 2 -Result $result -Lengths $lengths | Format-Table X,ComputerName,Result,KB,Size,Title -AutoSize
+            $task = 1
+            $packages | Update-Package -Task $Task -Result $result -Lengths $lengths | Format-Table X,ComputerName,Result,KB,Size,Title -AutoSize
         }
     } else {
-        $task = '1'
-        $packages | Update-Package -Task 2 -Result $result -Lengths $lengths | Format-Table X,ComputerName,Result,KB,Size,Title -AutoSize
+        $task = 1
+        $packages | Update-Package -Task $Task -Result $result -Lengths $lengths | Format-Table X,ComputerName,Result,KB,Size,Title -AutoSize
     }
 }
